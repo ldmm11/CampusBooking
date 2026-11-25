@@ -46,7 +46,7 @@ campus-booking/
 ├── docs/
 │   ├── adr/                    架构决策记录，每个技术选型一页
 │   └── ...                     设计文档、ER 图、复盘
-├── src/main/java/com/campus/booking/
+├── src/main/java/com/cbooking/campusbooking/
 │   ├── common/                 统一返回体、异常、工具类（谁都能用，改之前打招呼）
 │   ├── auth/                   登录、JWT、拦截器
 │   ├── venue/                  场地与时段
