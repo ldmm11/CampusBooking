@@ -3,6 +3,8 @@ package com.cbooking.campusbooking.auth;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+
+import com.cbooking.campusbooking.auth.service.JwtService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +22,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(AuthWebTest.Users.class)
 class AuthWebTest {
     @Autowired MockMvc mvc;
-    @Autowired JwtService jwt;
+    @Autowired
+    JwtService jwt;
 
     @Test void meAndAuthenticationErrors() throws Exception {
         mvc.perform(get("/me")).andExpect(status().isUnauthorized()).andExpect(jsonPath("$.code").value(2001));

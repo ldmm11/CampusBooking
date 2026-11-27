@@ -1,12 +1,17 @@
 package com.cbooking.campusbooking.auth;
 
+import com.cbooking.campusbooking.auth.service.JwtService;
 import com.cbooking.campusbooking.common.BusinessException;
 import com.cbooking.campusbooking.common.ErrorCode;
+import com.cbooking.campusbooking.user.Role;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
@@ -40,7 +45,7 @@ public class AuthConfiguration implements WebMvcConfigurer {
                     AuthUser user = lookup == null ? null : lookup.findById(id).orElse(null);
                     if (user == null) throw new BusinessException(ErrorCode.UNAUTHENTICATED);
                     if (!user.enabled()) throw new BusinessException(ErrorCode.FORBIDDEN);
-                    if (request.getRequestURI().startsWith("/admin/") && !"ADMIN".equals(user.role()))
+                    if (request.getRequestURI().startsWith("/admin/") && !Role.SUPER_ADMIN.equals(Role.fromCode(Integer.parseInt(user.role()))))
                         throw new BusinessException(ErrorCode.FORBIDDEN);
                     request.setAttribute(CURRENT_USER, user);
                     return true;
@@ -50,5 +55,9 @@ public class AuthConfiguration implements WebMvcConfigurer {
                 }
             }
         }).addPathPatterns("/me", "/me/**", "/admin", "/admin/**", "/bookings", "/bookings/**");
+    }
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 }

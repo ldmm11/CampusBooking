@@ -1,11 +1,10 @@
-package com.cbooking.campusbooking.auth;
+package com.cbooking.campusbooking.auth.service;
 
 import tools.jackson.databind.ObjectMapper;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.SecureRandom;
 import java.time.Clock;
-import java.time.Instant;
 import java.util.Base64;
 import java.util.Map;
 import javax.crypto.Mac;
