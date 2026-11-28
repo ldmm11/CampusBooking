@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cbooking.campusbooking.venue.SlotMapper">
+    <select id="list" resultType="com.cbooking.campusbooking.venue.Slot">
+        SELECT id, venue_id, slot_date, start_time, end_time,
+            CASE status WHEN 0 THEN 'AVAILABLE' WHEN 1 THEN 'OCCUPIED' WHEN 2 THEN 'CLOSED' END AS status
+        FROM t_slot WHERE venue_id = #{venueId} AND slot_date = #{date}
+        <if test="status != null">AND status = #{status.code}</if>
+        ORDER BY start_time
+    </select>
+</mapper>
