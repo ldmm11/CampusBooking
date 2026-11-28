@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cbooking.campusbooking.venue.VenueMapper">
+    <sql id="columns">
+        id, name, CASE type WHEN 0 THEN 'BADMINTON' WHEN 1 THEN 'STUDY_ROOM'
+            WHEN 2 THEN 'BASKETBALL' END AS type,
+        location, capacity, open_time, close_time, 'ENABLED' AS status, create_at, update_at
+    </sql>
+    <sql id="enabledFilter">
+        FROM t_venue WHERE status = 1
+        <if test="name != null">AND LOCATE(#{name}, name) > 0</if>
+        <if test="type != null">AND type = #{type.code}</if>
+    </sql>
+    <select id="count" resultType="long">
+        SELECT COUNT(*) <include refid="enabledFilter"/>
+    </select>
+    <select id="list" resultType="com.cbooking.campusbooking.venue.Venue">
+        SELECT <include refid="columns"/> <include refid="enabledFilter"/>
+        ORDER BY id LIMIT #{size} OFFSET #{offset}
+    </select>
+    <select id="findEnabled" resultType="com.cbooking.campusbooking.venue.Venue">
+        SELECT <include refid="columns"/> FROM t_venue WHERE status = 1 AND id = #{id}
+    </select>
+</mapper>
